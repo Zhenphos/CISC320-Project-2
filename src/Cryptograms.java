@@ -45,11 +45,13 @@ public class Cryptograms {
     }
 
     public static String decode() {
-        String[] sortedStrings = sortByLength(words);
+        String solution = "";
+        //String[] sortedStrings = sortByLength(words);
         
         /*for (int i = 0; i < words.length; i++) {
             
         }*/
+        return solution;
     }
 
     public static String[] getWordsOfLength(int length) {
