@@ -8,15 +8,15 @@ import java.util.*;
 public class Cryptograms {
 
     static String input = "";
-    static ArrayList<String> dictionary = new ArrayList<>();
+    static List<String> dictionary = new ArrayList<>();
+    static Map<Character, Character> alphabet = new HashMap<>(26); // test
     static String[] inputWords;
-    static String singleLetterWord;
+    static String singleLetterWord = null;
+    //static int numDecodings = 0;
+    static char[] letters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
+            's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
     public static void main(String[] args) {
-
-        char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-                's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
-        
         try {
             Scanner scan = new Scanner(System.in);
             input = scan.nextLine();
@@ -36,26 +36,80 @@ public class Cryptograms {
             System.exit(1);
         }
 
+        Collections.sort(dictionary, Comparator.comparing(String::length));
+
         inputWords = input.split(" ");
-        decode();
-        //int numDecodings = 0;
+        List<String> solutions = new ArrayList<>(decode());
+        System.out.println(solutions.size());
+        for (String word : solutions) {
+            System.out.println(word);
+        }
     }
 
-    public static String decode() {
+    public static List<String> decode() {
         String solution = "";
-        String[] sortedWords = sortWords(inputWords);
+        List<String> solutions = new ArrayList<>();
+        List<String> temp = new ArrayList<>();
+        //String[] sortedWords = sortWords(inputWords);
         
-        for (String cryptogram : sortedWords) {
+        /*for (String cryptogram : sortedWords) {
             int[] pattern = findPattern(cryptogram);
             ArrayList<String> potentialMatches = getMatches(cryptogram, pattern);
+        }*/
 
-            for (String match : potentialMatches) {
-                for (int i = 0; i < cryptogram.length(); i++) {
-
+        /*for (String cryptogram : inputWords) {
+            int index = 0;
+            for (char letter : cryptogram.toCharArray()) {
+                if (!alphabet.containsKey(letter)) {
+                    alphabet.put(letter, letters[index]);
+                    index++;
+                } else if (alphabet.get(letter) == )
+            }
+        }*/
+        for (String cryptogram : inputWords) {
+            temp.clear();
+            int[] pattern = findPattern(cryptogram);
+            for (String word : dictionary) {
+                if (word.length() == pattern.length) {
+                    int[] potentialMatches = findPattern(word);
+                    if (Arrays.equals(pattern, potentialMatches)) {
+                        temp.add(word);
+                    }
+                }
+            }
+            if (solution.equals("")) {
+                solution = solution + cryptogram;
+                solutions.clear();
+                for (String decoding : temp) {
+                    solutions.add(decoding);
+                }
+            } else {
+                solution = solution + " " + cryptogram;
+                int[] potentialMatches = findPattern(solution);
+                List<String> list = new ArrayList<>();
+                for (String answer : solutions) {
+                    for (String decoding : temp) {
+                        list.add(answer + " " + decoding);
+                    }
+                }
+                solutions.clear();
+                for (String decoding : list) {
+                    solutions.add(decoding);
+                }
+                List<String> list2 = new ArrayList<>();
+                for (String answer: solutions) {
+                    int[] solutionMatches = findPattern(answer);
+                    if (Arrays.equals(solutionMatches, potentialMatches)) {
+                        list2.add(answer);
+                    }
+                }
+                solutions.clear();
+                for (String decoding : list2) {
+                    solutions.add(decoding);
                 }
             }
         }
-        return solution;
+        return solutions;
     }
 
     public static String[] getWordsOfLength(int length) {
