@@ -82,7 +82,7 @@ public class Cryptograms {
                     solutions.add(decoding);
                 }
                 List<String> list2 = new ArrayList<>();
-                for (String answer: solutions) {
+                for (String answer : solutions) {
                     int[] solutionMatches = findPattern(answer);
                     if (Arrays.equals(solutionMatches, potentialMatches)) {
                         list2.add(answer);
