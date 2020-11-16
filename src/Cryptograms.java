@@ -9,12 +9,7 @@ public class Cryptograms {
 
     static String input = "";
     static List<String> dictionary = new ArrayList<>();
-    static Map<Character, Character> alphabet = new HashMap<>(26); // test
     static String[] inputWords;
-    static String singleLetterWord = null;
-    //static int numDecodings = 0;
-    static char[] letters = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r',
-            's', 't', 'u', 'v', 'w', 'x', 'y', 'z' };
 
     public static void main(String[] args) {
         try {
@@ -36,7 +31,7 @@ public class Cryptograms {
             System.exit(1);
         }
 
-        Collections.sort(dictionary, Comparator.comparing(String::length));
+        Collections.sort(dictionary, Comparator.comparing(String::length)); // sorts the dictionary by word length
 
         inputWords = input.split(" ");
         List<String> solutions = new ArrayList<>(decode());
@@ -46,26 +41,16 @@ public class Cryptograms {
         }
     }
 
+    /**
+     * Decodes the inputted cryptograms using a given dictionary
+     * 
+     * @return a list of the decoded strings
+     */
     public static List<String> decode() {
         String solution = "";
         List<String> solutions = new ArrayList<>();
         List<String> temp = new ArrayList<>();
-        //String[] sortedWords = sortWords(inputWords);
-        
-        /*for (String cryptogram : sortedWords) {
-            int[] pattern = findPattern(cryptogram);
-            ArrayList<String> potentialMatches = getMatches(cryptogram, pattern);
-        }*/
 
-        /*for (String cryptogram : inputWords) {
-            int index = 0;
-            for (char letter : cryptogram.toCharArray()) {
-                if (!alphabet.containsKey(letter)) {
-                    alphabet.put(letter, letters[index]);
-                    index++;
-                } else if (alphabet.get(letter) == )
-            }
-        }*/
         for (String cryptogram : inputWords) {
             temp.clear();
             int[] pattern = findPattern(cryptogram);
@@ -112,16 +97,30 @@ public class Cryptograms {
         return solutions;
     }
 
-    public static String[] getWordsOfLength(int length) {
+    /**
+     * Gets the words in the dictionary of the given length
+     * NOT CURRENTLY USED IN THIS IMPLEMENTATION
+     * 
+     * @param length an integer representing the length of the words to be found
+     * @return an ArrayList of strings with the same length as the inputted length
+     */
+    public static ArrayList<String> getWordsOfLength(int length) {
         ArrayList<String> validWords = new ArrayList<>();
         for (String word : dictionary) {
             if (word.length() == length) {
                 validWords.add(word);
             }
         }
-        return validWords.toArray(new String[validWords.size()]);
+        return validWords;
     }
 
+    /**
+     * Gets the longest word in an array of words
+     * NOT CURRENTLY USED IN THIS IMPLEMENTATION
+     * 
+     * @param words an array of strings containing words
+     * @return a String containing the longest word
+     */
     public static String getLongestWord(String[] words) {
         int length = 0;
         String longestWord = "";
@@ -135,29 +134,14 @@ public class Cryptograms {
     }
 
     /**
-     * Sorts words by length
-     * @param unsortedWords array of Strings to be sorted
-     * @return the sorted array of Strings
+     * Finds a pattern in a word String and makes an array containing the pattern
+     * 
+     * @param word a String containing the word to find the pattern of
+     * @return an array of integers containing the pattern of the given word
      */
-    public static String[] sortWords(String[] unsortedWords) {
-        ArrayList<String> list = new ArrayList<>();
-        String[] sortedWords = new String[unsortedWords.length];
-        list.addAll(Arrays.asList(unsortedWords));
-
-        for (int i = 0; i < unsortedWords.length; i++) {
-            String longestWord = getLongestWord(list.toArray(new String[list.size()]));
-            if (longestWord.length() == 1) {
-                singleLetterWord = longestWord;
-            }
-            sortedWords[i] = longestWord;
-            list.remove(longestWord);
-        }
-        return sortedWords;
-    }
-
     public static int[] findPattern(String word) {
         int[] pattern = new int[word.length()];
-        HashMap<Character, Integer> lettersMap = new HashMap<>();
+        Map<Character, Integer> lettersMap = new HashMap<>();
 
         for (int i = 0; i < word.length(); i++) {
             char letter = word.charAt(i);
@@ -171,14 +155,39 @@ public class Cryptograms {
         return pattern;
     }
 
+    /**
+     * Gets matches for words in the dictionary which fit a pattern defined by an
+     * array of integers
+     * NOT CURRENTLY USED IN THIS IMPLEMENTATION
+     * 
+     * @param cryptogram a String containing a cryptogram
+     * @param patternedWord an array of integers containing the pattern of a word
+     * @return an ArrayList of strings containing the word matches to the pattern
+     */
     public static ArrayList<String> getMatches(String cryptogram, int[] patternedWord) {
-        String[] potentialMatches = getWordsOfLength(cryptogram.length());
+        ArrayList<String> potentialMatches = new ArrayList<>(getWordsOfLength(cryptogram.length()));
         ArrayList<String> matches = new ArrayList<>();
         for (String word : potentialMatches) {
             int[] pattern = findPattern(word);
-            if (Arrays.equals(pattern, patternedWord)) 
+            if (Arrays.equals(pattern, patternedWord)) {
                 matches.add(word);
+            }
         }
         return matches;
+    }
+
+    /**
+     * Checks if two words are a match based on their patterns
+     * NOT CURRENTLY USED IN THIS IMPLEMENTATION
+     * 
+     * @param word1 a String of the first word
+     * @param word2 a String of the second word
+     * @return true if the words' patterns match and false if they don't
+     */
+    public static Boolean findMatches(String word1, String word2) {
+        if (Arrays.equals(findPattern(word1), findPattern(word2))) {
+            return true;
+        }
+        return false;
     }
 }
